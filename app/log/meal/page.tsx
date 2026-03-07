@@ -204,7 +204,7 @@ export default function LogMealPage() {
               disabled={loading}
             />
             <button
-              onClick={sendMessage}
+              onClick={() => sendMessage()}
               disabled={loading || (!input.trim() && !imageFile)}
               className="px-4 py-2.5 bg-[#4F46E5] text-white text-sm font-medium rounded-xl hover:bg-[#4338CA] disabled:opacity-60"
             >
