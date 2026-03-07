@@ -35,6 +35,11 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
+  // Admin always gets through — no subscription check
+  if (pathname.startsWith('/admin')) {
+    return res
+  }
+
   // Check trial and subscription
   const [profileRes, subRes] = await Promise.all([
     supabase.from('user_profiles').select('created_at').eq('user_id', user.id).single(),
