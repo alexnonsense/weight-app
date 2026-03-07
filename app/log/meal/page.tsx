@@ -26,6 +26,7 @@ export default function LogMealPage() {
     if (!file) return
     setImageFile(file)
     setImagePreview(URL.createObjectURL(file))
+    sendMessage(file)
   }
 
   async function toBase64(file: File): Promise<string> {
@@ -37,8 +38,9 @@ export default function LogMealPage() {
     })
   }
 
-  async function sendMessage() {
-    if (!input.trim() && !imageFile) return
+  async function sendMessage(overrideFile?: File) {
+    const activeFile = overrideFile ?? imageFile
+    if (!input.trim() && !activeFile) return
     const userContent = input.trim() || 'What is in this meal?'
     const userMsg: Message = { role: 'user', content: userContent }
     const newMessages = [...messages, userMsg]
@@ -50,9 +52,9 @@ export default function LogMealPage() {
     let imageMimeType = null
 
     // Only send image on first message
-    if (imageFile && messages.length === 0) {
-      imageBase64 = await toBase64(imageFile)
-      imageMimeType = imageFile.type
+    if (activeFile && messages.length === 0) {
+      imageBase64 = await toBase64(activeFile)
+      imageMimeType = activeFile.type
     }
 
     const res = await fetch('/api/ai/meal', {
