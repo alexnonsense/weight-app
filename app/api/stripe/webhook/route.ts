@@ -56,7 +56,6 @@ export async function POST(req: NextRequest) {
     if (supabaseRow.data) {
       await supabase.from('subscriptions').update({
         status: sub.status === 'active' ? 'active' : sub.status,
-        current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
       }).eq('stripe_subscription_id', sub.id)
     }
   }
